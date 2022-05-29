@@ -6,6 +6,7 @@ import {
   ResponsiveContext,
   Image,
   Layer,
+  Text,
 } from 'grommet'
 import {
   Cancel,
@@ -45,7 +46,7 @@ export default function Header() {
         // size="small"
         href="/tx"
       />
-      <Anchor icon={<Packages />} label="SNARKS" href="/snark" />
+      <Anchor icon={<Packages />} label="SNARKs" href="/snark" />
       <Anchor
         icon={<Reports />}
         label="Charts & Stats"
@@ -62,7 +63,18 @@ export default function Header() {
     >
       <Box direction="row" align="center" justify="between" width="100%">
         <Button
-          icon={<Image src="/logo.svg" width={120} />}
+          icon={
+            <Box direction="row" gap="xsmall">
+              <Image src="/logo.svg" width={120} alt="" />
+              <Text
+                weight="bold"
+                size="4xl"
+                style={{ fontFamily: 'monospace' }}
+              >
+                Block
+              </Text>
+            </Box>
+          }
           hoverIndicator
           href="/"
         />

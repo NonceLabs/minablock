@@ -59,8 +59,9 @@ export default function Home() {
           <Card
             height="280px"
             width="medium"
-            background="neutral-2"
             pad="medium"
+            elevation="small"
+            background="accent-3"
           >
             <CardHeader justify="start" gap="small">
               <Svg3DSelectFace />

@@ -46,13 +46,26 @@ export default function Blocks() {
             <Heading margin="none" level={2}>
               Blocks
             </Heading>
-            <Text>The last blocks</Text>
+            <Text>The latest blocks</Text>
           </Box>
         </Box>
         <Box width="1200px" pad="medium">
+          {isLoading && (
+            <Box align="center" justify="center" pad="large">
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: `<lottie-player src="https://assets6.lottiefiles.com/private_files/lf30_qrvv8h4p.json"  background="transparent"  speed="1"  style="width: 300px; height: 300px;"  loop  autoplay></lottie-player>`,
+                }}
+              />
+            </Box>
+          )}
           {(data?.blocks || []).map((block) => {
             return (
-              <Link key={block.stateHash} href={`/block/${block.stateHash}`}>
+              <Link
+                key={block.stateHash}
+                href={`/block/${block.stateHash}`}
+                passHref
+              >
                 <Box
                   direction="row"
                   justify="between"

@@ -6,17 +6,16 @@ import { Box, DataTable, Grid, Heading, Tab, Tabs, Text } from 'grommet'
 import { Svg3DSelectSolid } from 'iconoir-react'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import useSWR from 'swr'
 import { graphFetcher } from 'utils/fetcher'
 
 export default function Block() {
   const { query } = useRouter()
   const hash = query.hash as string
 
-  const [block, setBlock] = useState<MinaBlock | undefined>()
-
-  useEffect(() => {
-    if (hash) {
-      graphFetcher(`
+  const { data, error } = useSWR<{ block: MinaBlock }>(
+    hash
+      ? `
         {
           block(query: {stateHash: "${hash}"}) {
             blockHeight
@@ -61,14 +60,13 @@ export default function Block() {
             }
           }
         }
-      `)
-        .then((result) => {
-          console.log(result)
-          setBlock(result.block)
-        })
-        .catch(console.error)
-    }
-  }, [hash])
+      `
+      : null,
+    graphFetcher
+  )
+
+  const isLoading = !error && !data
+  const block = data?.block
 
   return (
     <Layout title={hash ?? ''}>
@@ -89,136 +87,156 @@ export default function Block() {
           </Box>
         </Box>
 
-        <Grid columns="1/3" pad="medium" gap="medium" border margin="medium">
-          <InfoItem infoKey="HASH" infoValue={block?.stateHash} ellipsis />
-          <InfoItem
-            infoKey="CREATOR"
-            infoValue={block?.creator}
-            ellipsis
-            link={`/account/${block?.creator}`}
-          />
-          <InfoItem
-            infoKey="WINNING ACCOUNT"
-            infoValue={block?.winnerAccount.publicKey}
-            ellipsis
-            link={`/account/${block?.winnerAccount.publicKey}`}
-          />
-          <InfoItem
-            infoKey="COINBASE RECEIVER"
-            infoValue={block?.transactions?.coinbaseReceiverAccount?.publicKey}
-            ellipsis
-            link={`/account/${block?.transactions.coinbaseReceiverAccount.publicKey}`}
-          />
-          <InfoItem infoKey="FEE" infoValue={block?.txFees} />
-          <InfoItem
-            infoKey="COINBASE"
-            infoValue={block?.transactions?.coinbase}
-          />
-          <InfoItem infoKey="SNARK FEE" infoValue={block?.snarkFees} />
-          <InfoItem
-            infoKey="DATE"
-            infoValue={dayjs(block?.dateTime).format('M/D/YYYY, hh:mm:ss')}
-          />
-        </Grid>
+        {isLoading ? (
+          <Box align="center" justify="center" pad="large">
+            <div
+              dangerouslySetInnerHTML={{
+                __html: `<lottie-player src="https://assets6.lottiefiles.com/private_files/lf30_qrvv8h4p.json"  background="transparent"  speed="1"  style="width: 300px; height: 300px;"  loop  autoplay></lottie-player>`,
+              }}
+            />
+          </Box>
+        ) : (
+          <Box>
+            <Grid
+              columns="1/3"
+              pad="medium"
+              gap="medium"
+              border
+              margin="medium"
+            >
+              <InfoItem infoKey="HASH" infoValue={block?.stateHash} ellipsis />
+              <InfoItem
+                infoKey="CREATOR"
+                infoValue={block?.creator}
+                ellipsis
+                link={`/account/${block?.creator}`}
+              />
+              <InfoItem
+                infoKey="WINNING ACCOUNT"
+                infoValue={block?.winnerAccount.publicKey}
+                ellipsis
+                link={`/account/${block?.winnerAccount.publicKey}`}
+              />
+              <InfoItem
+                infoKey="COINBASE RECEIVER"
+                infoValue={
+                  block?.transactions?.coinbaseReceiverAccount?.publicKey
+                }
+                ellipsis
+                link={`/account/${block?.transactions.coinbaseReceiverAccount.publicKey}`}
+              />
+              <InfoItem infoKey="FEE" infoValue={block?.txFees} />
+              <InfoItem
+                infoKey="COINBASE"
+                infoValue={block?.transactions?.coinbase}
+              />
+              <InfoItem infoKey="SNARK FEE" infoValue={block?.snarkFees} />
+              <InfoItem
+                infoKey="DATE"
+                infoValue={dayjs(block?.dateTime).format('M/D/YYYY, hh:mm:ss')}
+              />
+            </Grid>
 
-        <Box pad="small">
-          <Tabs justify="start">
-            <Tab
-              title={
-                <Heading level={2} margin="none">
-                  User Commands
-                </Heading>
-              }
-            >
-              <Box pad="medium">
-                <DataTable
-                  columns={[
-                    {
-                      property: 'hash',
-                      header: 'Hash',
-                      render: (datum) => (
-                        <HashLink
-                          hash={datum.hash}
-                          link={`/tx/${datum.hash}`}
-                        />
-                      ),
-                    },
-                    {
-                      property: 'from',
-                      header: 'From',
-                      render: (datum) => (
-                        <HashLink
-                          hash={datum.from}
-                          link={`/account/${datum.from}`}
-                        />
-                      ),
-                    },
-                    {
-                      property: 'to',
-                      header: 'To',
-                      render: (datum) => (
-                        <HashLink
-                          hash={datum.to}
-                          link={`/account/${datum.to}`}
-                        />
-                      ),
-                    },
-                    {
-                      property: 'fee',
-                      header: 'Fee',
-                    },
-                    {
-                      property: 'amount',
-                      header: 'Amount',
-                    },
-                  ]}
-                  data={block?.transactions.userCommands || []}
-                  pad="small"
-                  border={{ side: 'top', size: '1px' }}
-                />
-              </Box>
-            </Tab>
-            <Tab
-              title={
-                <Heading level={2} margin="none">
-                  SNARK Jobs
-                </Heading>
-              }
-            >
-              <Box pad="medium">
-                <DataTable
-                  columns={[
-                    {
-                      property: 'prover',
-                      header: 'Prover',
-                      render: (datum) => (
-                        <HashLink
-                          hash={datum.prover}
-                          link={`/account/${datum.prover}`}
-                          ellipsis={false}
-                        />
-                      ),
-                    },
-                    {
-                      property: 'fee',
-                      header: 'Fee',
-                    },
-                  ]}
-                  data={block?.snarkJobs || []}
-                  pad="small"
-                  border={{ side: 'top', size: '1px' }}
-                />
-              </Box>
-            </Tab>
-            <Tab
-              title={
-                <Heading level={2} margin="none">
-                  Fee Transfer
-                </Heading>
-              }
-            ></Tab>
-          </Tabs>
-        </Box>
+            <Box pad="small">
+              <Tabs justify="start">
+                <Tab
+                  title={
+                    <Heading level={2} margin="none">
+                      User Commands
+                    </Heading>
+                  }
+                >
+                  <Box pad="medium">
+                    <DataTable
+                      columns={[
+                        {
+                          property: 'hash',
+                          header: 'Hash',
+                          render: (datum) => (
+                            <HashLink
+                              hash={datum.hash}
+                              link={`/tx/${datum.hash}`}
+                            />
+                          ),
+                        },
+                        {
+                          property: 'from',
+                          header: 'From',
+                          render: (datum) => (
+                            <HashLink
+                              hash={datum.from}
+                              link={`/account/${datum.from}`}
+                            />
+                          ),
+                        },
+                        {
+                          property: 'to',
+                          header: 'To',
+                          render: (datum) => (
+                            <HashLink
+                              hash={datum.to}
+                              link={`/account/${datum.to}`}
+                            />
+                          ),
+                        },
+                        {
+                          property: 'fee',
+                          header: 'Fee',
+                        },
+                        {
+                          property: 'amount',
+                          header: 'Amount',
+                        },
+                      ]}
+                      data={block?.transactions.userCommands || []}
+                      pad="small"
+                      border={{ side: 'top', size: '1px' }}
+                    />
+                  </Box>
+                </Tab>
+                <Tab
+                  title={
+                    <Heading level={2} margin="none">
+                      SNARK Jobs
+                    </Heading>
+                  }
+                >
+                  <Box pad="medium">
+                    <DataTable
+                      columns={[
+                        {
+                          property: 'prover',
+                          header: 'Prover',
+                          render: (datum) => (
+                            <HashLink
+                              hash={datum.prover}
+                              link={`/account/${datum.prover}`}
+                              ellipsis={false}
+                            />
+                          ),
+                        },
+                        {
+                          property: 'fee',
+                          header: 'Fee',
+                        },
+                      ]}
+                      data={block?.snarkJobs || []}
+                      pad="small"
+                      border={{ side: 'top', size: '1px' }}
+                    />
+                  </Box>
+                </Tab>
+                <Tab
+                  title={
+                    <Heading level={2} margin="none">
+                      Fee Transfer
+                    </Heading>
+                  }
+                ></Tab>
+              </Tabs>
+            </Box>
+          </Box>
+        )}
       </Box>
     </Layout>
   )

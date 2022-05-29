@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-page-custom-font */
+/* eslint-disable @next/next/no-sync-scripts */
 import { Grommet, grommet, Main } from 'grommet'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -18,11 +20,11 @@ export default function Layout({
         <meta name="description" content="Best MINA Explorer." />
         <meta name="keywords" content="MINA, explorer" />
         <meta name="author" content="zk Inc." />
-        {/* <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js" />
+        <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js" />
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Ubuntu"
-        ></link> */}
+          href="https://fonts.googleapis.com/css?family=Ubuntu&display=optional"
+        ></link>
       </Head>
       <Header />
       <Main direction="column" align="center" pad="none" className="noise-bg">
