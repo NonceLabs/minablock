@@ -16,7 +16,7 @@ export default function Layout({
   return (
     <Grommet theme={grommet}>
       <Head>
-        <title>{`${title} | ZK Explorer`}</title>
+        <title>{`${title} | MinaBlock`}</title>
         <meta name="description" content="Best MINA Explorer." />
         <meta name="keywords" content="MINA, explorer" />
         <meta name="author" content="zk Inc." />

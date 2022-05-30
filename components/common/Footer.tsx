@@ -41,7 +41,7 @@ export default function OFooter() {
         </Box>
 
         <Box gap="medium" align={isMobile ? 'center' : 'end'}>
-          <Text size="small">© 2022 zk Inc. All Rights Reserved</Text>
+          <Text size="small">© 2022 MinaBlock. All Rights Reserved</Text>
         </Box>
       </Box>
     </Footer>

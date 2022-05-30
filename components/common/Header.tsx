@@ -37,20 +37,20 @@ export default function Header() {
       <Anchor
         icon={<Svg3DSelectFace />}
         label="Blocks"
-        // size="small"
+        size="16px"
         href="/block"
       />
       <Anchor
         icon={<Consumable />}
         label="Transactions"
-        // size="small"
+        size="16px"
         href="/tx"
       />
-      <Anchor icon={<Packages />} label="SNARKs" href="/snark" />
+      <Anchor icon={<Packages />} label="SNARKs" href="/snark" size="16px" />
       <Anchor
         icon={<Reports />}
         label="Charts & Stats"
-        // size="small"
+        size="16px"
         href="/stats"
       />
     </Box>
@@ -58,25 +58,22 @@ export default function Header() {
 
   return (
     <GHeader
-      pad={{ horizontal: 'large', vertical: 'small' }}
+      pad={{ horizontal: 'large', vertical: 'medium' }}
       className="navigator"
     >
       <Box direction="row" align="center" justify="between" width="100%">
         <Button
           icon={
             <Box direction="row" gap="xsmall">
-              <Image src="/logo.svg" width={120} alt="" />
-              <Text
-                weight="bold"
-                size="4xl"
-                style={{ fontFamily: 'monospace' }}
-              >
+              <Image src="/logo.svg" width={80} alt="" />
+              <Text weight="bold" size="30px">
                 Block
               </Text>
             </Box>
           }
           hoverIndicator
           href="/"
+          style={{ padding: 0 }}
         />
 
         {isMobile ? <Menu onClick={() => setMenuVisible(true)} /> : menus}

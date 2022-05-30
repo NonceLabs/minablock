@@ -1,11 +1,12 @@
 import HashLink from 'components/common/HashLink'
 import InfoItem from 'components/common/InfoItem'
 import Layout from 'components/common/Layout'
+import Loading from 'components/common/Loading'
+import Transactions from 'components/Transactions'
 import dayjs from 'dayjs'
 import { Box, DataTable, Grid, Heading, Tab, Tabs, Text } from 'grommet'
 import { Svg3DSelectSolid } from 'iconoir-react'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import { graphFetcher } from 'utils/fetcher'
 
@@ -88,54 +89,42 @@ export default function Block() {
         </Box>
 
         {isLoading ? (
-          <Box align="center" justify="center" pad="large">
-            <div
-              dangerouslySetInnerHTML={{
-                __html: `<lottie-player src="https://assets6.lottiefiles.com/private_files/lf30_qrvv8h4p.json"  background="transparent"  speed="1"  style="width: 300px; height: 300px;"  loop  autoplay></lottie-player>`,
-              }}
-            />
-          </Box>
+          <Loading />
         ) : (
           <Box>
-            <Grid
-              columns="1/3"
-              pad="medium"
-              gap="medium"
-              border
-              margin="medium"
-            >
-              <InfoItem infoKey="HASH" infoValue={block?.stateHash} ellipsis />
+            <Box pad="medium" gap="medium" border margin="medium">
               <InfoItem
-                infoKey="CREATOR"
+                infoKey="Creator"
                 infoValue={block?.creator}
-                ellipsis
                 link={`/account/${block?.creator}`}
               />
               <InfoItem
-                infoKey="WINNING ACCOUNT"
+                infoKey="Winning Aaccount"
                 infoValue={block?.winnerAccount.publicKey}
-                ellipsis
                 link={`/account/${block?.winnerAccount.publicKey}`}
               />
               <InfoItem
-                infoKey="COINBASE RECEIVER"
+                infoKey="Coinbase Receiver"
                 infoValue={
                   block?.transactions?.coinbaseReceiverAccount?.publicKey
                 }
-                ellipsis
                 link={`/account/${block?.transactions.coinbaseReceiverAccount.publicKey}`}
               />
-              <InfoItem infoKey="FEE" infoValue={block?.txFees} />
-              <InfoItem
-                infoKey="COINBASE"
-                infoValue={block?.transactions?.coinbase}
-              />
-              <InfoItem infoKey="SNARK FEE" infoValue={block?.snarkFees} />
-              <InfoItem
-                infoKey="DATE"
-                infoValue={dayjs(block?.dateTime).format('M/D/YYYY, hh:mm:ss')}
-              />
-            </Grid>
+              <Grid columns="1/3" gap="medium">
+                <InfoItem infoKey="Fee" infoValue={block?.txFees} />
+                <InfoItem
+                  infoKey="Coinbase"
+                  infoValue={block?.transactions?.coinbase}
+                />
+                <InfoItem infoKey="SNARK Fee" infoValue={block?.snarkFees} />
+                <InfoItem
+                  infoKey="Date"
+                  infoValue={dayjs(block?.dateTime).format(
+                    'M/D/YYYY, hh:mm:ss'
+                  )}
+                />
+              </Grid>
+            </Box>
 
             <Box pad="small">
               <Tabs justify="start">
@@ -146,53 +135,7 @@ export default function Block() {
                     </Heading>
                   }
                 >
-                  <Box pad="medium">
-                    <DataTable
-                      columns={[
-                        {
-                          property: 'hash',
-                          header: 'Hash',
-                          render: (datum) => (
-                            <HashLink
-                              hash={datum.hash}
-                              link={`/tx/${datum.hash}`}
-                            />
-                          ),
-                        },
-                        {
-                          property: 'from',
-                          header: 'From',
-                          render: (datum) => (
-                            <HashLink
-                              hash={datum.from}
-                              link={`/account/${datum.from}`}
-                            />
-                          ),
-                        },
-                        {
-                          property: 'to',
-                          header: 'To',
-                          render: (datum) => (
-                            <HashLink
-                              hash={datum.to}
-                              link={`/account/${datum.to}`}
-                            />
-                          ),
-                        },
-                        {
-                          property: 'fee',
-                          header: 'Fee',
-                        },
-                        {
-                          property: 'amount',
-                          header: 'Amount',
-                        },
-                      ]}
-                      data={block?.transactions.userCommands || []}
-                      pad="small"
-                      border={{ side: 'top', size: '1px' }}
-                    />
-                  </Box>
+                  <Transactions data={block?.transactions.userCommands ?? []} />
                 </Tab>
                 <Tab
                   title={
@@ -222,7 +165,11 @@ export default function Block() {
                       ]}
                       data={block?.snarkJobs || []}
                       pad="small"
-                      border={{ side: 'top', size: '1px' }}
+                      background={{
+                        header: { color: 'neutral-2', opacity: 'strong' },
+                        body: ['light-1', 'light-3'],
+                        footer: { color: 'dark-3', opacity: 'strong' },
+                      }}
                     />
                   </Box>
                 </Tab>

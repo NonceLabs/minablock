@@ -1,5 +1,6 @@
 import InfoItem from 'components/common/InfoItem'
 import Layout from 'components/common/Layout'
+import Loading from 'components/common/Loading'
 import dayjs from 'dayjs'
 import { Box, Grid, Heading, Text } from 'grommet'
 import { Consumable, MoveRight } from 'iconoir-react'
@@ -60,6 +61,7 @@ export default function Tx() {
             <Text>{hash}</Text>
           </Box>
         </Box>
+        {isLoading && <Loading />}
         {tx && (
           <Box gap="large" pad={{ horizontal: 'medium' }}>
             <Box>
@@ -71,29 +73,23 @@ export default function Tx() {
                 <InfoItem
                   infoKey="FROM"
                   infoValue={tx.from}
-                  ellipsis
-                  width={400}
+                  width={360}
                   link={`/account/${tx.from}`}
                 />
                 <MoveRight />
                 <InfoItem
                   infoKey="TO"
                   infoValue={tx.from}
-                  ellipsis
-                  width={400}
+                  width={360}
                   link={`/account/${tx.to}`}
                 />
               </Box>
             </Box>
-            <Grid columns="1/3" border pad="medium" gap="medium">
-              <InfoItem
-                infoKey="Date"
-                infoValue={dayjs(tx.dateTime).format('M/D/YYYY, hh:mm:ss')}
-              />
+
+            <Grid columns="1" border pad="medium" gap="medium">
               <InfoItem
                 infoKey="Block State Hash"
                 infoValue={tx.block.stateHash}
-                ellipsis
                 link={`/block/${tx.block.stateHash}`}
               />
               <InfoItem infoKey="Block Height" infoValue={tx.blockHeight} />
@@ -103,6 +99,10 @@ export default function Tx() {
               <InfoItem
                 infoKey="CANONICAL"
                 infoValue={tx.canonical ? 'true' : 'false'}
+              />
+              <InfoItem
+                infoKey="Date"
+                infoValue={dayjs(tx.dateTime).format('M/D/YYYY, hh:mm:ss')}
               />
             </Grid>
           </Box>

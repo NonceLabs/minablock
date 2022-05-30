@@ -11,13 +11,13 @@ export default function InfoItem({
   infoValue,
   ellipsis = false,
   link = '',
-  width = 200,
+  width = '100%',
 }: {
   infoKey: string
   infoValue: string | number
   ellipsis?: boolean
   link?: string
-  width?: number
+  width?: number | string
 }) {
   return (
     <Box>
@@ -28,7 +28,11 @@ export default function InfoItem({
         <Anchor
           href={link}
           label={infoValue}
-          style={ellipsis ? { ...ellipsisStyle, width } : {}}
+          style={
+            ellipsis
+              ? { ...ellipsisStyle, width, wordBreak: 'break-all' }
+              : { width, wordBreak: 'break-all' }
+          }
           title={`${infoValue}`}
         />
       ) : (

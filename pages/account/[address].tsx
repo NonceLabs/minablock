@@ -1,6 +1,7 @@
 import HashLink from 'components/common/HashLink'
 import InfoItem from 'components/common/InfoItem'
 import Layout from 'components/common/Layout'
+import Loading from 'components/common/Loading'
 import dayjs from 'dayjs'
 import { Box, DataTable, Grid, Heading, ResponsiveContext, Text } from 'grommet'
 import { Wallet } from 'iconoir-react'
@@ -72,13 +73,7 @@ export default function Account() {
           </Box>
         </Box>
         {isLoadingAccount && isLoadingTxs ? (
-          <Box align="center" justify="center" pad="large">
-            <div
-              dangerouslySetInnerHTML={{
-                __html: `<lottie-player src="https://assets6.lottiefiles.com/private_files/lf30_qrvv8h4p.json"  background="transparent"  speed="1"  style="width: 300px; height: 300px;"  loop  autoplay></lottie-player>`,
-              }}
-            />
-          </Box>
+          <Loading />
         ) : (
           <Box>
             <Box pad="medium">
@@ -157,7 +152,11 @@ export default function Account() {
                 ]}
                 data={txData?.transactions ?? []}
                 pad="small"
-                border={{ side: 'top', size: '1px' }}
+                background={{
+                  header: { color: 'neutral-2', opacity: 'strong' },
+                  body: ['light-1', 'light-3'],
+                  footer: { color: 'dark-3', opacity: 'strong' },
+                }}
               />
             </Box>
           </Box>

@@ -110,3 +110,9 @@ interface MinaSummary {
   stateHash: string
   totalCurrency: string
 }
+
+interface MinaStake {
+  balance: number
+  delegate: string
+  public_key: string
+}
