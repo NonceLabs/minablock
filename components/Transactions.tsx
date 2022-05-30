@@ -1,4 +1,6 @@
-import { Box, DataTable } from 'grommet'
+import dayjs from 'dayjs'
+import { Box, DataTable, Text } from 'grommet'
+import { formatMina } from 'utils/format'
 import HashLink from './common/HashLink'
 
 export default function Transactions({
@@ -10,6 +12,15 @@ export default function Transactions({
     <Box pad="medium" style={{ overflowX: 'scroll' }}>
       <DataTable
         columns={[
+          {
+            property: 'dateTime',
+            header: 'Time',
+            render: (datum) => (
+              <Text color="dark-4" size="small">
+                {dayjs(datum.dateTime).format('M/D/YYYY, hh:mm:ss')}
+              </Text>
+            ),
+          },
           {
             property: 'hash',
             header: 'Hash',
@@ -34,10 +45,16 @@ export default function Transactions({
           {
             property: 'fee',
             header: 'Fee',
+            render: (datum) => <Text>{formatMina(datum.fee)}</Text>,
           },
           {
             property: 'amount',
             header: 'Amount',
+            render: (datum) => (
+              <Text style={{ fontFamily: 'monospace' }}>
+                {formatMina(datum.amount)}
+              </Text>
+            ),
           },
         ]}
         data={data || []}

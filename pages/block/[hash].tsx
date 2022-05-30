@@ -9,6 +9,7 @@ import { Svg3DSelectSolid } from 'iconoir-react'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import { graphFetcher } from 'utils/fetcher'
+import { formatMina } from 'utils/format'
 
 export default function Block() {
   const { query } = useRouter()
@@ -84,7 +85,7 @@ export default function Block() {
             <Heading margin="none" level={2}>
               Block #{block?.blockHeight}
             </Heading>
-            <Text>{hash}</Text>
+            <Text className="hash-break">{hash}</Text>
           </Box>
         </Box>
 
@@ -111,12 +112,15 @@ export default function Block() {
                 link={`/account/${block?.transactions.coinbaseReceiverAccount.publicKey}`}
               />
               <Grid columns="1/3" gap="medium">
-                <InfoItem infoKey="Fee" infoValue={block?.txFees} />
+                <InfoItem infoKey="Fee" infoValue={formatMina(block?.txFees)} />
                 <InfoItem
                   infoKey="Coinbase"
-                  infoValue={block?.transactions?.coinbase}
+                  infoValue={formatMina(block?.transactions?.coinbase)}
                 />
-                <InfoItem infoKey="SNARK Fee" infoValue={block?.snarkFees} />
+                <InfoItem
+                  infoKey="SNARK Fee"
+                  infoValue={formatMina(block?.snarkFees)}
+                />
                 <InfoItem
                   infoKey="Date"
                   infoValue={dayjs(block?.dateTime).format(
@@ -131,7 +135,7 @@ export default function Block() {
                 <Tab
                   title={
                     <Heading level={2} margin="none">
-                      User Commands
+                      Txs
                     </Heading>
                   }
                 >
@@ -140,7 +144,7 @@ export default function Block() {
                 <Tab
                   title={
                     <Heading level={2} margin="none">
-                      SNARK Jobs
+                      Jobs
                     </Heading>
                   }
                 >
@@ -173,13 +177,13 @@ export default function Block() {
                     />
                   </Box>
                 </Tab>
-                <Tab
+                {/* <Tab
                   title={
                     <Heading level={2} margin="none">
                       Fee Transfer
                     </Heading>
                   }
-                ></Tab>
+                ></Tab> */}
               </Tabs>
             </Box>
           </Box>

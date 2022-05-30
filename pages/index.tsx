@@ -162,7 +162,7 @@ export default function Home() {
                       <Box direction="row" align="end">
                         <Text weight="bold" size="2xl">
                           {block?.slot}
-                          <Text color="#666"> / 7104</Text>
+                          <Text color="#666"> / 7140</Text>
                         </Text>
                       </Box>
                     </Box>

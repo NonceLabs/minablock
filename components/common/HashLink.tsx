@@ -1,4 +1,4 @@
-import { Anchor, Box, Text, Tip } from 'grommet'
+import { Anchor } from 'grommet'
 
 export default function HashLink({
   hash,

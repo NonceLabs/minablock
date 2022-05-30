@@ -58,7 +58,7 @@ export default function Header() {
 
   return (
     <GHeader
-      pad={{ horizontal: 'large', vertical: 'medium' }}
+      pad={{ horizontal: 'large', vertical: 'small' }}
       className="navigator"
     >
       <Box direction="row" align="center" justify="between" width="100%">
@@ -66,7 +66,7 @@ export default function Header() {
           icon={
             <Box direction="row" gap="xsmall">
               <Image src="/logo.svg" width={80} alt="" />
-              <Text weight="bold" size="30px">
+              <Text weight="bold" size="28px">
                 Block
               </Text>
             </Box>

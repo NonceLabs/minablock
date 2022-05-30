@@ -1,4 +1,5 @@
 import Layout from 'components/common/Layout'
+import Loading from 'components/common/Loading'
 import StakeCard from 'components/StakeCard'
 import { Box, Heading, ResponsiveContext, Text } from 'grommet'
 import { Packages } from 'iconoir-react'
@@ -26,7 +27,7 @@ export default function Snarks() {
     graphFetcher
   )
 
-  console.log(data)
+  const isLoading = !data && !error
 
   return (
     <Layout title="SNARKs">
@@ -55,11 +56,15 @@ export default function Snarks() {
                 </Box>
               </Box>
 
-              <Box gap="small">
-                {(data?.stakes || []).map((stake) => {
-                  return <StakeCard key={stake.delegate} stake={stake} />
-                })}
-              </Box>
+              {isLoading ? (
+                <Loading />
+              ) : (
+                <Box gap="small">
+                  {(data?.stakes || []).map((stake) => {
+                    return <StakeCard key={stake.delegate} stake={stake} />
+                  })}
+                </Box>
+              )}
             </Box>
           )
         }}

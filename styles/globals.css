@@ -67,3 +67,8 @@ input:focus {
   -moz-animation: rainbow-text-simple-animation-rev 0.75s ease forwards;
   animation: rainbow-text-simple-animation-rev 0.75s ease forwards;
 }
+
+.hash-break {
+  max-width: 100%;
+  word-break: break-all;
+}

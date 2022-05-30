@@ -2,6 +2,7 @@ import { Anchor, Box, Footer, Text, Image, ResponsiveContext } from 'grommet'
 import {
   Discord,
   GitHub,
+  GitHubOutline,
   Mail,
   Medium,
   Telegram,
@@ -35,12 +36,15 @@ export default function OFooter() {
         gap="large"
       >
         <Box direction="column" gap="small">
-          <Box direction="row" align="center" className="social" gap="medium">
-            <Text size="small">Community</Text>
+          <Box direction="row" align="center" gap="medium">
+            <Anchor
+              icon={<GitHubOutline />}
+              href="https://github.com/noncelabs"
+            />
           </Box>
         </Box>
 
-        <Box gap="medium" align={isMobile ? 'center' : 'end'}>
+        <Box gap="medium" pad="medium" align={isMobile ? 'center' : 'end'}>
           <Text size="small">© 2022 MinaBlock. All Rights Reserved</Text>
         </Box>
       </Box>

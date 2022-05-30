@@ -2,6 +2,7 @@ import HashLink from 'components/common/HashLink'
 import InfoItem from 'components/common/InfoItem'
 import Layout from 'components/common/Layout'
 import Loading from 'components/common/Loading'
+import Transactions from 'components/Transactions'
 import dayjs from 'dayjs'
 import { Box, DataTable, Grid, Heading, ResponsiveContext, Text } from 'grommet'
 import { Wallet } from 'iconoir-react'
@@ -9,6 +10,7 @@ import { useRouter } from 'next/router'
 import { useContext } from 'react'
 import useSWR from 'swr'
 import { graphFetcher, httpFetcher } from 'utils/fetcher'
+import { formatMina } from 'utils/format'
 
 export default function Account() {
   const { query } = useRouter()
@@ -69,7 +71,9 @@ export default function Account() {
             <Heading margin="none" level={2}>
               Account
             </Heading>
-            <Text color="dark-2">{address}</Text>
+            <Text color="dark-2" className="hash-break">
+              {address}
+            </Text>
           </Box>
         </Box>
         {isLoadingAccount && isLoadingTxs ? (
@@ -82,7 +86,7 @@ export default function Account() {
                   <InfoItem infoKey="Username" infoValue={account?.username} />
                   <InfoItem
                     infoKey="Balance"
-                    infoValue={account?.balance?.total}
+                    infoValue={Number(account?.balance?.total).toFixed(2)}
                   />
                   <InfoItem infoKey="Nonce" infoValue={account?.nonce} />
                 </Grid>
@@ -105,59 +109,7 @@ export default function Account() {
                 Transactions
               </Heading>
 
-              <DataTable
-                columns={[
-                  {
-                    property: 'dateTime',
-                    header: 'Time',
-                    render: (datum) => (
-                      <Text color="dark-4" size="small">
-                        {dayjs(datum.dateTime).format('M/D/YYYY, hh:mm:ss')}
-                      </Text>
-                    ),
-                  },
-                  {
-                    property: 'hash',
-                    header: 'Hash',
-                    render: (datum) => (
-                      <HashLink hash={datum.hash} link={`/tx/${datum.hash}`} />
-                    ),
-                  },
-                  {
-                    property: 'from',
-                    header: 'From',
-                    render: (datum) => (
-                      <HashLink
-                        hash={datum.from}
-                        link={`/account/${datum.from}`}
-                      />
-                    ),
-                  },
-                  {
-                    property: 'to',
-                    header: 'To',
-                    render: (datum) => (
-                      <HashLink hash={datum.to} link={`/account/${datum.to}`} />
-                    ),
-                  },
-                  {
-                    property: 'amount',
-                    header: 'Amount',
-                    render: (datum) => (
-                      <Text style={{ fontFamily: 'monospace' }}>
-                        {datum.amount}
-                      </Text>
-                    ),
-                  },
-                ]}
-                data={txData?.transactions ?? []}
-                pad="small"
-                background={{
-                  header: { color: 'neutral-2', opacity: 'strong' },
-                  body: ['light-1', 'light-3'],
-                  footer: { color: 'dark-3', opacity: 'strong' },
-                }}
-              />
+              <Transactions data={txData?.transactions ?? []} />
             </Box>
           </Box>
         )}

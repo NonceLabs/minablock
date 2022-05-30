@@ -37,7 +37,11 @@ export default function InfoItem({
         />
       ) : (
         <Text
-          style={ellipsis ? { ...ellipsisStyle, width } : {}}
+          style={
+            ellipsis
+              ? { ...ellipsisStyle, width, wordBreak: 'break-all' }
+              : { width, wordBreak: 'break-all' }
+          }
           title={`${infoValue}`}
         >
           {infoValue}
