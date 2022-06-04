@@ -27,7 +27,7 @@ export default function Account() {
     address
       ? `
     {
-      transactions(limit: 30, query: {canonical: true, from: "${address}"}, sortBy: BLOCKHEIGHT_DESC) {
+      transactions(limit: 30, query: {canonical: true, OR: [{from: "${address}"}, {to: "${address}"}]}, sortBy: BLOCKHEIGHT_DESC) {
         amount
         blockHeight
         canonical

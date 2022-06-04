@@ -71,7 +71,6 @@ interface MinaAccount {
   }
   epochTotalStakingBalance: string
   nonce: number
-  publicKey: string
   receiptChainHash: string
   totalBlocks: number
   totalSnarks: number
